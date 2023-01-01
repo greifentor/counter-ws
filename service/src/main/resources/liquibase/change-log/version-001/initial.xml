@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
-	<changeSet author="dm-comp" id="Add-Basic-Tables">
+	<changeSet author="dm-comp" id="Initial-Data-Scheme">
+		<createTable tableName="USER">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="TOKEN" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="GLOBAL_ID" type="VARCHAR(50)" />
+			<column name="NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="USER" />
+		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="USER" />
+		<createTable tableName="COUNTER">
+			<column name="LAST_COUNTER_EVENT" type="TIMESTAMP" />
+			<column name="CURRENT_VALUE" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+			<column name="PERIOD" type="VARCHAR(50)" />
+			<column name="VALUE_TO_DEVIDE" type="NUMERIC(10, 2)" />
+			<column name="SORT_ORDER" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+			<column name="VIEW_MODE" type="VARCHAR(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="COUNTER" />
+		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="COUNTER" />
+		<modifyDataType columnName="LOCKED" newDataType="INTEGER" tableName="DATABASECHANGELOGLOCK" />
+		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="COUNTER" constraintName="FK_COUNTER_USER_TO_USER" referencedColumnNames="ID" referencedTableName="USER" />
 	</changeSet>
 </databaseChangeLog>

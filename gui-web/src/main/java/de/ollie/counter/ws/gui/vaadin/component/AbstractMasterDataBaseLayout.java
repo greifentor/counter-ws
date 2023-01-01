@@ -40,7 +40,7 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 		void remove();
 	}
 
-	private static final Logger logger = LogManager.getLogger(AbstractMasterDataBaseLayout.class);
+	private static final Logger LOG = LogManager.getLogger(AbstractMasterDataBaseLayout.class);
 
 	protected Button buttonRemove;
 	protected Button buttonSave;
@@ -55,7 +55,7 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-		logger.info("setParameter");
+		LOG.info("setParameter");
 		Location location = event.getLocation();
 		QueryParameters queryParameters = location.getQueryParameters();
 		parametersMap = queryParameters.getParameters();
@@ -67,7 +67,7 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 
 	@Override
 	public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-		logger.info("check for authorization");
+		LOG.info("check for authorization");
 		UserAuthorizationChecker.forwardToLoginOnNoUserSetForSession(getSessionData(), beforeEnterEvent);
 		createButtons();
 		doBeforeEnter(beforeEnterEvent);
@@ -152,7 +152,9 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 		integerField.setHasControls(true);
 		integerField.setValue(fieldContent);
 		integerField.setWidthFull();
-		integerField.setStep(step);
+		if (step != null) {
+			integerField.setStep(step);
+		}
 		return integerField;
 	}
 

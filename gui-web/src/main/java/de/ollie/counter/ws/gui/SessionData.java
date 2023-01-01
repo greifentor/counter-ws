@@ -6,15 +6,16 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
+import de.ollie.counter.ws.core.model.localization.LocalizationSO;
+import de.ollie.counter.ws.core.service.JWTService.AuthorizationData;
 import lombok.Data;
 
 /**
  * An object to hold data during the session.
  *
- * GENERATED CODE !!! DO NOT CHANGE !!!
+ * NO GENERATED CODE !!! DO CHANGE !!!
  */
 @Component
 @VaadinSessionScope
@@ -23,6 +24,8 @@ public class SessionData {
 
 	private static int counter = 0;
 
+	private AccessChecker accessChecker;
+	private AuthorizationData authorizationData;
 	private SessionId id = new SessionId("counterws-" + (counter++));
 	private LocalizationSO localization = LocalizationSO.DE;
 	private Map<String, Object> parameters = new HashMap<>();

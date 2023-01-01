@@ -15,6 +15,7 @@ import com.vaadin.flow.router.QueryParameters;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
 import de.ollie.counter.ws.gui.vaadin.ApplicationStartView;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
+@Generated
 @Named
 @RequiredArgsConstructor
 public class ButtonFactory {
@@ -83,7 +85,7 @@ public class ButtonFactory {
 		return createResourcedButton(resourceManager, "commons.button.remove.text", action, sessionData);
 	}
 
-	private Button createResourcedButton(ResourceManager resourceManager, String resourceId,
+	public Button createResourcedButton(ResourceManager resourceManager, String resourceId,
 			Consumer<ClickEvent<?>> action, SessionData sessionData) {
 		Button button = createButton(resourceManager.getLocalizedString(resourceId, sessionData.getLocalization()));
 		button.addClickListener(action::accept);
