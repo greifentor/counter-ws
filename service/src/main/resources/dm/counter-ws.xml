@@ -29,8 +29,7 @@
     <ComplexIndices />
     <DataSources>
         <Import dbName="IMPORT" description="no description" domains="false" driver="IMPORT" name="unknown" references="false" user="usr" />
-        <DatabaseConnection dbExecMode="HSQL" driver="org.hsqldb.jdbcDriver" name="HypersonicSQL (GUI)" quote="" setDomains="false" setNotNull="true" setReferences="true" url="jdbc:hsqldb:file:/home/ollie/eclipse-workspace-2021-09/shopping-list/gui-web/db/content/shopping-list" userName="sa" />
-        <DatabaseConnection dbExecMode="MYSQL" driver="org.mariadb.jdbc.Driver" name="mariaDB" quote="" setDomains="false" setNotNull="false" setReferences="false" url="jdbc:mariadb://localhost:3306/shoppinglist" userName="shoppinglist" />
+        <DatabaseConnection dbExecMode="MYSQL" driver="org.mariadb.jdbc.Driver" name="mariaDB" quote="" setDomains="false" setNotNull="false" setReferences="false" url="jdbc:mariadb://localhost:3306/counterws" userName="counterws" />
     </DataSources>
     <Domains>
         <Domain comment="" dataType="2" decimalPlace="2" history="" initialValue="NULL" length="10" name="Double" parameters="" type="numeric(10, 2)" />
