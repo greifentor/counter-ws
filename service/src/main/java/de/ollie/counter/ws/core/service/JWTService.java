@@ -26,7 +26,7 @@ public interface JWTService {
 	public static class AuthorizationData {
 
 		private String applicationName;
-		private LocalDateTime endOfValidity;
+		private LocalDateTime loginDateTime;
 		private User user;
 		private String[] applicationRights;
 

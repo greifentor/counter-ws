@@ -8,20 +8,19 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.Page;
 import de.ollie.counter.ws.core.model.PageParameters;
-import de.ollie.counter.ws.core.model.Counter;
+import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.counter.ws.core.service.port.persistence.CounterPersistencePort;
+import de.ollie.counter.ws.persistence.converter.CounterDBOConverter;
 import de.ollie.counter.ws.persistence.converter.PageConverter;
 import de.ollie.counter.ws.persistence.converter.PageParametersToPageableConverter;
-import de.ollie.counter.ws.persistence.converter.CounterDBOConverter;
+import de.ollie.counter.ws.persistence.converter.UserDBOConverter;
 import de.ollie.counter.ws.persistence.entity.CounterDBO;
 import de.ollie.counter.ws.persistence.repository.CounterDBORepository;
-import de.ollie.counter.ws.persistence.converter.UserDBOConverter;
 import lombok.Generated;
-
-import de.ollie.counter.ws.core.model.User;
 
 /**
  * A generated JPA persistence adapter for counters.

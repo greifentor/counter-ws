@@ -2,6 +2,6 @@ package de.ollie.counter.ws.gui;
 
 public interface AccessChecker {
 
-	boolean checkToken();
+	boolean isSessionValid();
 
 }

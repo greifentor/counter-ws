@@ -1,5 +1,6 @@
 package de.ollie.counter.ws.gui;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,9 +30,10 @@ public class SessionData {
 	private SessionId id = new SessionId("counterws-" + (counter++));
 	private LocalizationSO localization = LocalizationSO.DE;
 	private Map<String, Object> parameters = new HashMap<>();
+	private LocalDateTime validUntil;
 
 	public String getUserName() {
-		return "N/A";
+		return authorizationData.getUser().getName();
 	}
 
 	public Optional<Object> findParameter(String id) {
