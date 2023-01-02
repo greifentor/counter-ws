@@ -88,7 +88,9 @@ public class MainMenuView extends VerticalLayout
 										"commons.button.logout.text",
 										event -> switchToCube(),
 										session),
-						resourceManager.getLocalizedString("commons.header.main-menu.label", session.getLocalization()),
+						resourceManager
+								.getLocalizedString("commons.header.main-menu.label", session.getLocalization())
+								.replace("{0}", webAppConfiguration.getAppVersion()),
 						HeaderLayoutMode.PLAIN),
 				buttonGridMasterData);
 		LOG.info("main menu view opened for user '{}'.", session.getUserName());

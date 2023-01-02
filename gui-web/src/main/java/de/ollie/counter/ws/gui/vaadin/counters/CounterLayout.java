@@ -69,16 +69,37 @@ public class CounterLayout extends VerticalLayout {
 						new ResponsiveStep("1920px", 7));
 		layout.add(new Label(counter.getName()));
 		if (counter.getViewMode() == ViewMode.COUNTS) {
-		} else if (counter.getViewMode() == ViewMode.DIVIDED_BY_COUNTS) {
-			int divideBy = counter.getCurrentValue() < 1 ? 1 : counter.getCurrentValue();
-			layout.add(new Label("" + (counter.getCurrentValue() / divideBy)));
+			layout.add(new Label("" + counter.getCurrentValue()));
 			layout
 					.add(
 							buttonFactory
 									.createResourcedButton(
 											resourceManager,
 											"CounterLayout.button.dividebycounts.inc.label",
-											event -> setLastClickEvent(),
+											event -> incrementCounter(),
+											session),
+							buttonFactory
+									.createResourcedButton(
+											resourceManager,
+											"CounterLayout.button.dividebycounts.dec.label",
+											event -> decrementCounter(),
+											session));
+		} else if (counter.getViewMode() == ViewMode.DIVIDED_BY_COUNTS) {
+			int divideBy = counter.getCurrentValue() < 1 ? 1 : counter.getCurrentValue();
+			layout.add(new Label(String.format("%1.2f", (counter.getValueToDevide() / divideBy))));
+			layout
+					.add(
+							buttonFactory
+									.createResourcedButton(
+											resourceManager,
+											"CounterLayout.button.dividebycounts.inc.label",
+											event -> incrementCounter(),
+											session),
+							buttonFactory
+									.createResourcedButton(
+											resourceManager,
+											"CounterLayout.button.dividebycounts.dec.label",
+											event -> decrementCounter(),
 											session));
 		} else if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
 			if (counter.getLastCounterEvent() != null) {
@@ -87,6 +108,7 @@ public class CounterLayout extends VerticalLayout {
 			} else {
 				layout.add(new Label(resourceManager.getLocalizedString("datetime.null", session.getLocalization())));
 			}
+			layout.add(new Label("-"));
 			layout
 					.add(
 							buttonFactory
@@ -97,6 +119,24 @@ public class CounterLayout extends VerticalLayout {
 											session));
 		}
 		add(layout);
+	}
+
+	private void decrementCounter() {
+		LOG.info("decrementCounter");
+		addToCounter(-1);
+	}
+
+	private void addToCounter(int value) {
+		LOG.info("addToCounter");
+		counter.setLastCounterEvent(LocalDateTime.now());
+		counter.setCurrentValue(counter.getCurrentValue() + value);
+		counter = counterService.update(counter);
+		updateView();
+	}
+
+	private void incrementCounter() {
+		LOG.info("incrementCounter");
+		addToCounter(1);
 	}
 
 	private void setLastClickEvent() {
