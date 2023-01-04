@@ -12,15 +12,17 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import de.ollie.counter.ws.core.service.JWTService.AuthorizationData;
 import lombok.Data;
+import lombok.Generated;
 
 /**
  * An object to hold data during the session.
  *
- * NO GENERATED CODE !!! DO CHANGE !!!
+ * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 @Component
-@VaadinSessionScope
 @Data
+@Generated
+@VaadinSessionScope
 public class SessionData {
 
 	private static int counter = 0;
