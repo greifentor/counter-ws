@@ -11,6 +11,8 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import de.ollie.counter.ws.core.service.JWTService.AuthorizationData;
+import de.ollie.counter.ws.gui.AccessChecker;
+
 import lombok.Data;
 import lombok.Generated;
 

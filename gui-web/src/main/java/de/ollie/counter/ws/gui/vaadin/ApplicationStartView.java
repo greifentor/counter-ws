@@ -27,7 +27,6 @@ import de.ollie.counter.ws.core.service.JWTService.AuthorizationData;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.AccessChecker;
 import de.ollie.counter.ws.gui.SessionData;
-import de.ollie.counter.ws.gui.WebAppConfiguration;
 import lombok.RequiredArgsConstructor;
 
 /**

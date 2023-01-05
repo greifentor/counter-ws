@@ -16,7 +16,6 @@ import com.vaadin.flow.router.Route;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
-import de.ollie.counter.ws.gui.WebAppConfiguration;
 import de.ollie.counter.ws.gui.vaadin.component.Button;
 import de.ollie.counter.ws.gui.vaadin.component.ButtonFactory;
 import de.ollie.counter.ws.gui.vaadin.component.ButtonGrid;
