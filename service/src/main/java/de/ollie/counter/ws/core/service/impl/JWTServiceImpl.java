@@ -15,12 +15,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
-import de.ollie.counter.ws.core.model.User;
+import de.ollie.counter.ws.core.service.AuthorizationUserService;
 import de.ollie.counter.ws.core.service.JWTService;
-import de.ollie.counter.ws.core.service.UserService;
 import de.ollie.counter.ws.core.service.exception.JWTNotValidException;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * An implementation for the JWT service interface.
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
 @Named
 @RequiredArgsConstructor
 public class JWTServiceImpl implements JWTService {
@@ -28,7 +32,7 @@ public class JWTServiceImpl implements JWTService {
 	private static final Logger LOGGER = LogManager.getLogger(JWTServiceImpl.class);
 
 	private final JWTServiceConfiguration configuration;
-	private final UserService userService;
+	private final AuthorizationUserService authorizationUserService;
 
 	@Override
 	public AuthorizationData getAuthorizationData(String jwt) {
@@ -84,30 +88,8 @@ public class JWTServiceImpl implements JWTService {
 		return new AuthorizationData(
 				decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_NAME).asString(),
 				loginDate,
-				findByGlobalIdOrCreate(decodedJWT),
+				authorizationUserService.findByGlobalIdOrCreate(decodedJWT),
 				decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_RIGHTS).asArray(String.class));
-	}
-
-	private User findByGlobalIdOrCreate(DecodedJWT decodedJWT) {
-		return userService
-				.findByGlobalId(getUserGlobalId(decodedJWT))
-				.orElseGet(() -> createUser(decodedJWT));
-	}
-
-	private String getUserGlobalId(DecodedJWT decodedJWT) {
-		return decodedJWT.getClaims().get(CLAIM_NAME_USER_GLOBAL_ID).asString();
-	}
-
-	private User createUser(DecodedJWT decodedJWT) {
-		return userService
-				.update(
-						userService
-								.create(
-										new User()
-												.setGlobalId(getUserGlobalId(decodedJWT))
-												.setName(decodedJWT.getClaims().get(CLAIM_NAME_USER_NAME).asString())
-												.setToken(
-														decodedJWT.getClaims().get(CLAIM_NAME_USER_TOKEN).asString())));
 	}
 
 	@Override
