@@ -2,7 +2,7 @@ package de.ollie.counter.ws.core.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import de.ollie.counter.ws.core.model.User;
+import de.ollie.counter.ws.core.model.AuthorizationUser;
 import lombok.Generated;
 
 /**
@@ -13,6 +13,6 @@ import lombok.Generated;
 @Generated
 public interface AuthorizationUserService {
 
-	User findByGlobalIdOrCreate(DecodedJWT decodedJWT);
+	AuthorizationUser findByGlobalIdOrCreate(DecodedJWT decodedJWT);
 
 }

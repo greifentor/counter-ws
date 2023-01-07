@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * An interface for access checkers.
+ * An interface for the JWT service.
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
