@@ -18,6 +18,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import de.ollie.counter.ws.core.service.AuthorizationUserService;
 import de.ollie.counter.ws.core.service.JWTService;
 import de.ollie.counter.ws.core.service.exception.JWTNotValidException;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
+@Generated
 @Named
 @RequiredArgsConstructor
 public class JWTServiceImpl implements JWTService {
