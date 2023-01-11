@@ -1,5 +1,7 @@
 package de.ollie.counter.ws.core.model;
 
+import de.ollie.counter.ws.core.model.AuthorizationUser;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Generated;
@@ -16,7 +18,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Generated
 @ToString(callSuper = true)
-public class User extends GeneratedUser {
+public class User extends GeneratedUser implements AuthorizationUser {
 
 	@Override
 	public User setId(long id) {

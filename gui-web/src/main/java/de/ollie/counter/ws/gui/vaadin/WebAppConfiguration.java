@@ -1,11 +1,18 @@
-package de.ollie.counter.ws.gui;
+package de.ollie.counter.ws.gui.vaadin;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
+import lombok.Generated;
 
+/**
+ * A class for the web app configuration;
+ *
+ * GENERATED CODE !!! DO NOT CHANGE !!!
+ */
 @Configuration
+@Generated
 @Getter
 public class WebAppConfiguration {
 
