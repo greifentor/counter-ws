@@ -16,6 +16,7 @@ import com.vaadin.flow.router.Route;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.service.CounterService;
+import de.ollie.counter.ws.core.service.TimeDistanceService;
 import de.ollie.counter.ws.core.service.UserService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
@@ -44,6 +45,7 @@ public class CountersView extends VerticalLayout implements BeforeEnterObserver,
 	private final GUIConfiguration guiConfiguration;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
+	private final TimeDistanceService timeDistanceService;
 	private final UserService userService;
 	private final WebAppConfiguration webAppConfiguration;
 
@@ -94,7 +96,7 @@ public class CountersView extends VerticalLayout implements BeforeEnterObserver,
 	}
 
 	private void createAndAddNewCounterComponent(Counter counter) {
-		add(new CounterLayout(counter, counterService, buttonFactory, resourceManager, session));
+		add(new CounterLayout(counter, counterService, timeDistanceService, buttonFactory, resourceManager, session));
 	}
 
 	private void switchToCube() {
