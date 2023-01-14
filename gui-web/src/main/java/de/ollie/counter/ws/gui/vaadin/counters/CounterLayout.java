@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.ViewMode;
 import de.ollie.counter.ws.core.service.CounterService;
+import de.ollie.counter.ws.core.service.TimeDistanceService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
 import de.ollie.counter.ws.gui.vaadin.component.ButtonFactory;
@@ -27,16 +28,19 @@ public class CounterLayout extends VerticalLayout {
 	private final ButtonFactory buttonFactory;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
+	private final TimeDistanceService timeDistanceService;
 
 	private Counter counter;
 
-	public CounterLayout(Counter counter, CounterService counterService, ButtonFactory buttonFactory,
+	public CounterLayout(Counter counter, CounterService counterService, TimeDistanceService timeDistanceService,
+			ButtonFactory buttonFactory,
 			ResourceManager resourceManager, SessionData session) {
 		this.counter = counter;
 		this.counterService = counterService;
 		this.buttonFactory = buttonFactory;
 		this.resourceManager = resourceManager;
 		this.session = session;
+		this.timeDistanceService = timeDistanceService;
 	}
 
 	@Override
@@ -105,10 +109,18 @@ public class CounterLayout extends VerticalLayout {
 			if (counter.getLastCounterEvent() != null) {
 				String pattern = resourceManager.getLocalizedString("datetime.format", session.getLocalization());
 				layout.add(new Label(counter.getLastCounterEvent().format(DateTimeFormatter.ofPattern(pattern))));
+				layout
+						.add(
+								new Label(
+										"(" + timeDistanceService
+												.getTimeDistanceAsString(
+														counter.getLastCounterEvent(),
+														LocalDateTime.now())
+												+ ")"));
 			} else {
 				layout.add(new Label(resourceManager.getLocalizedString("datetime.null", session.getLocalization())));
+				layout.add(new Label(resourceManager.getLocalizedString("datetime.null", session.getLocalization())));
 			}
-			layout.add(new Label("-"));
 			layout
 					.add(
 							buttonFactory

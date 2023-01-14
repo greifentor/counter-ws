@@ -47,7 +47,7 @@ public class TimeDistanceServiceImpl implements TimeDistanceService {
 		for (TimeUnitData timeUnitData : TIME_UNIT_DATA) {
 			long i = distanceInMinutes / timeUnitData.factor;
 			if (i > 0) {
-				if (!sb.isEmpty()) {
+				if (sb.length() > 0) {
 					sb.append(" ");
 				}
 				sb.append(i + timeUnitData.symbol);
