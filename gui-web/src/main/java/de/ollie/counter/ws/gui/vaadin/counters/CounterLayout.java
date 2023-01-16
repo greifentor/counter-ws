@@ -1,12 +1,12 @@
 package de.ollie.counter.ws.gui.vaadin.counters;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Label;
@@ -108,7 +108,16 @@ public class CounterLayout extends VerticalLayout {
 		} else if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
 			if (counter.getLastCounterEvent() != null) {
 				String pattern = resourceManager.getLocalizedString("datetime.format", session.getLocalization());
-				layout.add(new Label(counter.getLastCounterEvent().format(DateTimeFormatter.ofPattern(pattern))));
+				layout
+						.add(
+								new DateTimePicker(
+										resourceManager
+												.getLocalizedString(
+														"CounterLayout.datepicker.label.text",
+														session.getLocalization()),
+										counter.getLastCounterEvent(),
+										event -> setLastClickEvent(event.getValue())));
+				// layout.add(new Label(counter.getLastCounterEvent().format(DateTimeFormatter.ofPattern(pattern))));
 				layout
 						.add(
 								new Label(
@@ -127,7 +136,7 @@ public class CounterLayout extends VerticalLayout {
 									.createResourcedButton(
 											resourceManager,
 											"CounterLayout.button.lastclickevent.label",
-											event -> setLastClickEvent(),
+											event -> setLastClickEvent(LocalDateTime.now()),
 											session));
 		}
 		add(layout);
@@ -151,9 +160,9 @@ public class CounterLayout extends VerticalLayout {
 		addToCounter(1);
 	}
 
-	private void setLastClickEvent() {
+	private void setLastClickEvent(LocalDateTime localDateTime) {
 		LOG.info("setLastClickEvent");
-		counter.setLastCounterEvent(LocalDateTime.now());
+		counter.setLastCounterEvent(localDateTime);
 		counter = counterService.update(counter);
 		updateView();
 	}
