@@ -1,5 +1,7 @@
 package de.ollie.counter.ws.gui.vaadin;
 
+import java.util.NoSuchElementException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +15,12 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import de.ollie.counter.ws.core.model.Counter;
+import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
+import de.ollie.counter.ws.core.service.CounterService;
+import de.ollie.counter.ws.core.service.TimeDistanceService;
+import de.ollie.counter.ws.core.service.UserService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
 import de.ollie.counter.ws.gui.vaadin.component.Button;
@@ -21,7 +28,7 @@ import de.ollie.counter.ws.gui.vaadin.component.ButtonFactory;
 import de.ollie.counter.ws.gui.vaadin.component.ButtonGrid;
 import de.ollie.counter.ws.gui.vaadin.component.HeaderLayout;
 import de.ollie.counter.ws.gui.vaadin.component.HeaderLayout.HeaderLayoutMode;
-import de.ollie.counter.ws.gui.vaadin.counters.CountersView;
+import de.ollie.counter.ws.gui.vaadin.counters.CounterLayout;
 import de.ollie.counter.ws.gui.vaadin.masterdata.MasterDataView;
 import lombok.RequiredArgsConstructor;
 
@@ -39,9 +46,12 @@ public class MainMenuView extends VerticalLayout
 	private static final Logger LOG = LogManager.getLogger(MainMenuView.class);
 
 	private final ButtonFactory buttonFactory;
+	private final CounterService counterService;
 	private final GUIConfiguration guiConfiguration;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
+	private final TimeDistanceService timeDistanceService;
+	private final UserService userService;
 	private final WebAppConfiguration webAppConfiguration;
 
 	@Override
@@ -58,15 +68,6 @@ public class MainMenuView extends VerticalLayout
 		setWidthFull();
 		getStyle().set("background-image", "url('" + guiConfiguration.getMainMenuBackgroundFileName() + "')");
 		getStyle().set("background-size", "cover");
-		Button buttonCounters =
-				buttonFactory
-						.createButton(
-								resourceManager
-										.getLocalizedString(
-												"main-menu.button.counter.text",
-												session.getLocalization()));
-		buttonCounters.addClickListener(event -> switchToCounters());
-		buttonCounters.setWidthFull();
 		Button buttonMasterData =
 				buttonFactory
 						.createButton(
@@ -76,7 +77,7 @@ public class MainMenuView extends VerticalLayout
 												session.getLocalization()));
 		buttonMasterData.addClickListener(event -> switchToMasterData());
 		buttonMasterData.setWidthFull();
-		ButtonGrid buttonGridMasterData = new ButtonGrid(4, buttonCounters, buttonMasterData);
+		ButtonGrid buttonGridMasterData = new ButtonGrid(4, buttonMasterData);
 		buttonGridMasterData.setMargin(false);
 		buttonGridMasterData.setWidthFull();
 		add(
@@ -92,11 +93,8 @@ public class MainMenuView extends VerticalLayout
 								.replace("{0}", webAppConfiguration.getAppVersion()),
 						HeaderLayoutMode.PLAIN),
 				buttonGridMasterData);
+		addCounterComponents();
 		LOG.info("main menu view opened for user '{}'.", session.getUserName());
-	}
-
-	private void switchToCounters() {
-		getUI().ifPresent(ui -> ui.navigate(CountersView.URL));
 	}
 
 	private void switchToMasterData() {
@@ -118,6 +116,28 @@ public class MainMenuView extends VerticalLayout
 		String url = webAppConfiguration.getCubeURL();
 		LOG.info("returning to: " + url);
 		getUI().ifPresent(ui -> ui.getPage().setLocation(url));
+	}
+
+	private void addCounterComponents() {
+		User user = getUser();
+		counterService
+				.findAllByUser(user)
+				.stream()
+				.sorted((c0, c1) -> c0.getSortOrder() - c1.getSortOrder())
+				.forEach(counter -> createAndAddNewCounterComponent(counter));
+	}
+
+	private User getUser() {
+		return userService
+				.findByGlobalId(session.getAuthorizationData().getUser().getGlobalId())
+				.orElseThrow(
+						() -> new NoSuchElementException(
+								"user not found with global id: "
+										+ session.getAuthorizationData().getUser().getGlobalId()));
+	}
+
+	private void createAndAddNewCounterComponent(Counter counter) {
+		add(new CounterLayout(counter, counterService, timeDistanceService, buttonFactory, resourceManager, session));
 	}
 
 }

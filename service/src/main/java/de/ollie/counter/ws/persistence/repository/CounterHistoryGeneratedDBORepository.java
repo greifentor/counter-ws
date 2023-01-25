@@ -7,6 +7,7 @@ import de.ollie.counter.ws.persistence.entity.CounterHistoryDBO;
 import lombok.Generated;
 import java.util.List;
 
+import de.ollie.counter.ws.persistence.entity.CounterDBO;
 import de.ollie.counter.ws.persistence.entity.UserDBO;
 
 /**
@@ -17,6 +18,8 @@ import de.ollie.counter.ws.persistence.entity.UserDBO;
 @Generated
 @Repository
 public interface CounterHistoryGeneratedDBORepository extends JpaRepository<CounterHistoryDBO, Long> {
+
+	List<CounterHistoryDBO> findAllByCounter(CounterDBO counter);
 
 	List<CounterHistoryDBO> findAllByUser(UserDBO user);
 

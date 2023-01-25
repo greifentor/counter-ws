@@ -8,11 +8,13 @@ import javax.inject.Inject;
 import de.ollie.counter.ws.core.model.Page;
 import de.ollie.counter.ws.core.model.PageParameters;
 import de.ollie.counter.ws.core.model.CounterHistory;
+import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.service.port.persistence.CounterHistoryPersistencePort;
 import de.ollie.counter.ws.core.service.CounterHistoryService;
 import lombok.Generated;
 
+import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 
 /**
@@ -54,6 +56,11 @@ public abstract class CounterHistoryGeneratedServiceImpl implements CounterHisto
 	@Override
 	public void delete(CounterHistory model) {
 		persistencePort.delete(model);
+	}
+
+	@Override
+	public List<CounterHistory> findAllByCounter(Counter counter) {
+		return persistencePort.findAllByCounter(counter);
 	}
 
 	@Override

@@ -18,9 +18,11 @@ import de.ollie.counter.ws.persistence.converter.PageParametersToPageableConvert
 import de.ollie.counter.ws.persistence.converter.CounterHistoryDBOConverter;
 import de.ollie.counter.ws.persistence.entity.CounterHistoryDBO;
 import de.ollie.counter.ws.persistence.repository.CounterHistoryDBORepository;
+import de.ollie.counter.ws.persistence.converter.CounterDBOConverter;
 import de.ollie.counter.ws.persistence.converter.UserDBOConverter;
 import lombok.Generated;
 
+import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 
 /**
@@ -35,6 +37,8 @@ public abstract class CounterHistoryGeneratedJPAPersistenceAdapter implements Co
 	protected CounterHistoryDBOConverter converter;
 	@Inject
 	protected CounterHistoryDBORepository repository;
+	@Inject
+	protected CounterDBOConverter counterDBOConverter;
 	@Inject
 	protected UserDBOConverter userDBOConverter;
 
@@ -92,6 +96,11 @@ public abstract class CounterHistoryGeneratedJPAPersistenceAdapter implements Co
 	@Override
 	public void delete(CounterHistory model) {
 		repository.deleteById(model.getId());
+	}
+
+	@Override
+	public List<CounterHistory> findAllByCounter(Counter counter) {
+		return converter.toModel(repository.findAllByCounter(counterDBOConverter.toDBO(counter)));
 	}
 
 	@Override
