@@ -1,4 +1,4 @@
 cd ..
 mvn clean install -Pproduction -Dmaven.test.skip
 cd gui-web/
-java -Dserver.port=8082 -Dcube.url=http://localhost:8080/cube -jar target/counter-ws-gui-1.2.0.jar
+java -Dserver.port=8082 -Dcube.url=http://localhost:8080/cube -jar target/counter-ws-gui-1.3.0.jar
