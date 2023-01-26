@@ -61,11 +61,11 @@ class TimeDistanceServiceImplTest {
 		}
 
 		@Test
-		void returnsAStringWithContent10d2h3m_passingTwoDatesWith10Days2HoursAnd3MinutesDistance() {
+		void returnsAStringWithContent1w3d2h3m_passingTwoDatesWith10Days2HoursAnd3MinutesDistance() {
 			LocalDateTime dateTime0 = LocalDateTime.now();
 			LocalDateTime dateTime1 = dateTime0.plusDays(10).plusHours(2).plusMinutes(3);
-			assertEquals("10d 2h 3m", unitUnderTest.getTimeDistanceAsString(dateTime0, dateTime1));
-			assertEquals("10d 2h 3m", unitUnderTest.getTimeDistanceAsString(dateTime1, dateTime0));
+			assertEquals("1w 3d 2h 3m", unitUnderTest.getTimeDistanceAsString(dateTime0, dateTime1));
+			assertEquals("1w 3d 2h 3m", unitUnderTest.getTimeDistanceAsString(dateTime1, dateTime0));
 		}
 
 	}

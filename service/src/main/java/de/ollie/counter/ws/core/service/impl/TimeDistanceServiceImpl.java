@@ -40,7 +40,11 @@ public class TimeDistanceServiceImpl implements TimeDistanceService {
 	}
 
 	private static final TimeUnitData[] TIME_UNIT_DATA =
-			new TimeUnitData[] { new TimeUnitData("d", 1440), new TimeUnitData("h", 60), new TimeUnitData("m", 1) };
+			new TimeUnitData[] {
+					new TimeUnitData("w", 10080),
+					new TimeUnitData("d", 1440),
+					new TimeUnitData("h", 60),
+					new TimeUnitData("m", 1) };
 
 	private String distanceToString(long distanceInMinutes) {
 		StringBuilder sb = new StringBuilder();
