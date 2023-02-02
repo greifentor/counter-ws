@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import de.ollie.counter.ws.core.model.Page;
 import de.ollie.counter.ws.core.model.PageParameters;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.service.port.persistence.CounterPersistencePort;
+import de.ollie.counter.ws.core.service.port.persistence.CounterHistoryPersistencePort;
 import de.ollie.counter.ws.core.service.CounterService;
 import lombok.Generated;
 
@@ -25,6 +27,8 @@ public abstract class CounterGeneratedServiceImpl implements CounterService {
 
 	@Inject
 	protected CounterPersistencePort persistencePort;
+	@Inject
+	protected CounterHistoryPersistencePort counterHistoryPersistencePort;
 
 	@Override
 	public Counter create(Counter model) {
@@ -52,7 +56,9 @@ public abstract class CounterGeneratedServiceImpl implements CounterService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Counter model) {
+		counterHistoryPersistencePort.findAllByCounter(model).forEach(counterHistoryPersistencePort::delete);
 		persistencePort.delete(model);
 	}
 
