@@ -11,6 +11,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.ViewMode;
@@ -33,8 +34,7 @@ public class CounterLayout extends VerticalLayout {
 	private Counter counter;
 
 	public CounterLayout(Counter counter, CounterService counterService, TimeDistanceService timeDistanceService,
-			ButtonFactory buttonFactory,
-			ResourceManager resourceManager, SessionData session) {
+			ButtonFactory buttonFactory, ResourceManager resourceManager, SessionData session) {
 		this.counter = counter;
 		this.counterService = counterService;
 		this.buttonFactory = buttonFactory;
@@ -76,35 +76,15 @@ public class CounterLayout extends VerticalLayout {
 			layout.add(new Label("" + counter.getCurrentValue()));
 			layout
 					.add(
-							buttonFactory
-									.createResourcedButton(
-											resourceManager,
-											"CounterLayout.button.dividebycounts.inc.label",
-											event -> incrementCounter(),
-											session),
-							buttonFactory
-									.createResourcedButton(
-											resourceManager,
-											"CounterLayout.button.dividebycounts.dec.label",
-											event -> decrementCounter(),
-											session));
+							new Label(),
+							createIntegerFieldCurrentValue("CounterLayout.integerFieldCurrentValue.label.text"));
 		} else if (counter.getViewMode() == ViewMode.DIVIDED_BY_COUNTS) {
 			int divideBy = counter.getCurrentValue() < 1 ? 1 : counter.getCurrentValue();
 			layout.add(new Label(String.format("%1.2f", (counter.getValueToDevide() / divideBy))));
 			layout
 					.add(
-							buttonFactory
-									.createResourcedButton(
-											resourceManager,
-											"CounterLayout.button.dividebycounts.inc.label",
-											event -> incrementCounter(),
-											session),
-							buttonFactory
-									.createResourcedButton(
-											resourceManager,
-											"CounterLayout.button.dividebycounts.dec.label",
-											event -> decrementCounter(),
-											session));
+							new Label(),
+							createIntegerFieldCurrentValue("CounterLayout.integerFieldCurrentValue.label.text"));
 		} else if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
 			if (counter.getLastCounterEvent() != null) {
 				String pattern = resourceManager.getLocalizedString("datetime.format", session.getLocalization());
@@ -142,22 +122,21 @@ public class CounterLayout extends VerticalLayout {
 		add(layout);
 	}
 
-	private void decrementCounter() {
-		LOG.info("decrementCounter");
-		addToCounter(-1);
+	private IntegerField createIntegerFieldCurrentValue(String resourceId) {
+		IntegerField integerFieldCurrentValue =
+				new IntegerField(
+						resourceManager.getLocalizedString(resourceId, session.getLocalization()),
+						counter.getCurrentValue(),
+						event -> setCurrentValue(event.getValue()));
+		integerFieldCurrentValue.setHasControls(true);
+		return integerFieldCurrentValue;
 	}
 
-	private void addToCounter(int value) {
-		LOG.info("addToCounter");
-		counter.setLastCounterEvent(LocalDateTime.now());
-		counter.setCurrentValue(counter.getCurrentValue() + value);
+	private void setCurrentValue(Integer currentValue) {
+		LOG.info("setCurrentValue");
+		counter.setCurrentValue(currentValue);
 		counter = counterService.update(counter);
 		updateView();
-	}
-
-	private void incrementCounter() {
-		LOG.info("incrementCounter");
-		addToCounter(1);
 	}
 
 	private void setLastClickEvent(LocalDateTime localDateTime) {
