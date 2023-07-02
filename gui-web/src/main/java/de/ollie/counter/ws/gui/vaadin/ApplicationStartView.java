@@ -67,7 +67,10 @@ public class ApplicationStartView extends VerticalLayout implements AccessChecke
 			session.setAccessChecker(this);
 			session.setAuthorizationData(authorizationData);
 			session.setLocalization(LocalizationSO.DE);
-			LOG.info("session started by user: " + authorizationData.getUser().getName());
+			LOG
+					.info(
+							"session started by user: " + authorizationData.getUser().getName() + " ("
+									+ authorizationData.getUser().getGlobalId() + ")");
 			LOG.info("session valid until: " + authorizationData.getLoginDateTime());
 			LOG.info("current time: " + LocalDateTime.now());
 		} catch (Exception e) {

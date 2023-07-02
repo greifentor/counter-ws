@@ -19,6 +19,10 @@ import lombok.Generated;
 public class ButtonGrid extends VerticalLayout {
 
 	public ButtonGrid(int buttonsPerRow, Button... buttons) {
+		this(buttonsPerRow, new ArrayList<>(Arrays.asList(buttons)));
+	}
+
+	public ButtonGrid(int buttonsPerRow, List<Button> buttonList) {
 		getStyle().set("-moz-border-radius", "4px");
 		getStyle().set("-webkit-border-radius", "4px");
 		getStyle().set("border-radius", "4px");
@@ -27,7 +31,6 @@ public class ButtonGrid extends VerticalLayout {
 				.set(
 						"box-shadow",
 						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
-		List<Button> buttonList = new ArrayList<>(Arrays.asList(buttons));
 		while (!buttonList.isEmpty()) {
 			add(createRow(buttonsPerRow, buttonList));
 		}

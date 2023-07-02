@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.ViewMode;
+import de.ollie.counter.ws.core.service.CounterHistoryService;
 import de.ollie.counter.ws.core.service.CounterService;
 import de.ollie.counter.ws.core.service.TimeDistanceService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
@@ -26,6 +27,7 @@ public class CounterLayout extends VerticalLayout {
 	private static final Logger LOG = LogManager.getLogger(CounterLayout.class);
 
 	private final CounterService counterService;
+	private final CounterHistoryService counterHistoryService;
 	private final ButtonFactory buttonFactory;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
@@ -33,10 +35,12 @@ public class CounterLayout extends VerticalLayout {
 
 	private Counter counter;
 
-	public CounterLayout(Counter counter, CounterService counterService, TimeDistanceService timeDistanceService,
-			ButtonFactory buttonFactory, ResourceManager resourceManager, SessionData session) {
+	public CounterLayout(Counter counter, CounterService counterService, CounterHistoryService counterHistoryService,
+			TimeDistanceService timeDistanceService, ButtonFactory buttonFactory, ResourceManager resourceManager,
+			SessionData session) {
 		this.counter = counter;
 		this.counterService = counterService;
+		this.counterHistoryService = counterHistoryService;
 		this.buttonFactory = buttonFactory;
 		this.resourceManager = resourceManager;
 		this.session = session;
@@ -118,6 +122,9 @@ public class CounterLayout extends VerticalLayout {
 											"CounterLayout.button.lastclickevent.label",
 											event -> setLastClickEvent(LocalDateTime.now()),
 											session));
+			if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
+				layout.add(new Label("Max: " + counterHistoryService.getMaxDistanceByCounter(counter)));
+			}
 		}
 		add(layout);
 	}
