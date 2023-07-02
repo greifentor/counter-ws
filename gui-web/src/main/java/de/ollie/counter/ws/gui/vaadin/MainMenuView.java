@@ -19,6 +19,7 @@ import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import de.ollie.counter.ws.core.service.CounterHistoryService;
+import de.ollie.counter.ws.core.service.CounterResetService;
 import de.ollie.counter.ws.core.service.CounterService;
 import de.ollie.counter.ws.core.service.TimeDistanceService;
 import de.ollie.counter.ws.core.service.UserService;
@@ -49,6 +50,7 @@ public class MainMenuView extends VerticalLayout
 	private final ButtonFactory buttonFactory;
 	private final CounterService counterService;
 	private final CounterHistoryService counterHistoryService;
+	private final CounterResetService counterResetService;
 	private final GUIConfiguration guiConfiguration;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
@@ -122,6 +124,7 @@ public class MainMenuView extends VerticalLayout
 
 	private void addCounterComponents() {
 		User user = getUser();
+		counterResetService.processCounterPeriodEnds(user);
 		counterService
 				.findAllByUser(user)
 				.stream()
