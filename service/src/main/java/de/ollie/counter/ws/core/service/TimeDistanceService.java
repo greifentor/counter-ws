@@ -9,6 +9,10 @@ public interface TimeDistanceService {
 
 	static final String NO_DISTANCE_STRING = "-";
 
-	String getTimeDistanceAsString(LocalDateTime dateTime1, LocalDateTime dateTime2);
+	String getTimeDistanceAsString(LocalDateTime dateTime0, LocalDateTime dateTime1);
+
+	long getDistanceInMinutes(LocalDateTime dateTime0, LocalDateTime dateTime1);
+
+	String distanceToString(long distanceInMinutes);
 
 }

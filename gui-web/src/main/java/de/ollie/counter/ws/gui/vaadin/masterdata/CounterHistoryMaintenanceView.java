@@ -11,7 +11,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.Route;
 
-import de.ollie.counter.ws.core.model.Counter;
+import de.ollie.counter.ws.core.model.CounterHistory;
+import de.ollie.counter.ws.core.service.CounterHistoryService;
 import de.ollie.counter.ws.core.service.CounterService;
 import de.ollie.counter.ws.core.service.UserService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
@@ -25,37 +26,38 @@ import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
- * A dialog to edit Counter details.
+ * A dialog to edit CounterHistory details.
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 @Generated
-@Route(CounterMaintenanceView.URL)
+@Route(CounterHistoryMaintenanceView.URL)
 @CssImport("./styles/shared-styles.css")
 @CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/vaadin-text-area-styles.css", themeFor = "vaadin-text-area")
 @CssImport(value = "./styles/vaadin-combo-box-styles.css", themeFor = "vaadin-combo-box")
 @CssImport(value = "./styles/vaadin-checkbox-styles.css", themeFor = "vaadin-checkbox")
 @RequiredArgsConstructor
-public class CounterMaintenanceView extends AbstractMasterDataBaseLayout implements CounterDetailsLayout.Observer {
+public class CounterHistoryMaintenanceView extends AbstractMasterDataBaseLayout implements CounterHistoryDetailsLayout.Observer {
 
-	public static final String URL = "counterws/masterdata/counters/details";
+	public static final String URL = "counterws/masterdata/counterhistories/details";
 
-	private static final Logger logger = LogManager.getLogger(CounterMaintenanceView.class);
+	private static final Logger logger = LogManager.getLogger(CounterHistoryMaintenanceView.class);
 
 	@Autowired(required = false)
-	private MaintenanceViewRenderer<Counter> maintenanceViewRenderer;
+	private MaintenanceViewRenderer<CounterHistory> maintenanceViewRenderer;
 	@Autowired(required = false)
-	private DetailsLayoutComboBoxItemLabelGenerator<Counter> comboBoxItemLabelGenerator;
+	private DetailsLayoutComboBoxItemLabelGenerator<CounterHistory> comboBoxItemLabelGenerator;
 
 	private final ButtonFactory buttonFactory;
 	private final ResourceManager resourceManager;
 	private final MasterDataGUIConfiguration guiConfiguration;
-	private final CounterService service;
+	private final CounterHistoryService service;
+	private final CounterService counterService;
 	private final UserService userService;
 	private final SessionData session;
 
-	private Counter model;
+	private CounterHistory model;
 
 	@Override
 	protected ButtonFactory getButtonFactory() {
@@ -83,8 +85,8 @@ public class CounterMaintenanceView extends AbstractMasterDataBaseLayout impleme
 		}
 	}
 
-	private Counter createNewModel() {
-		return new Counter();
+	private CounterHistory createNewModel() {
+		return new CounterHistory();
 	}
 
 	@Override
@@ -101,22 +103,22 @@ public class CounterMaintenanceView extends AbstractMasterDataBaseLayout impleme
 										.createBackButton(
 												resourceManager,
 												this::getUI,
-												CounterPageView.URL,
+												CounterHistoryPageView.URL,
 												session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
-								resourceManager.getLocalizedString("CounterMaintenanceView.header.prefix.label", session.getLocalization()) + getHeaderSuffix(model),
+								resourceManager.getLocalizedString("CounterHistoryMaintenanceView.header.prefix.label", session.getLocalization()) + getHeaderSuffix(model),
 								HeaderLayoutMode.PLAIN),
 				getDetailsLayout(model));
 	}
 
-	private String getHeaderSuffix(Counter model) {
+	private String getHeaderSuffix(CounterHistory model) {
 		return maintenanceViewRenderer != null
 				? maintenanceViewRenderer.getHeaderSuffix(model)
 				: "" + model.getName();
 	}
 
-	private AbstractMasterDataBaseLayout getDetailsLayout(Counter model) {
-		return new CounterDetailsLayout(buttonFactory, model, service, userService, resourceManager, session, this, comboBoxItemLabelGenerator);
+	private AbstractMasterDataBaseLayout getDetailsLayout(CounterHistory model) {
+		return new CounterHistoryDetailsLayout(buttonFactory, model, service, counterService, userService, resourceManager, session, this, comboBoxItemLabelGenerator);
 	}
 
 	@Override
@@ -134,7 +136,7 @@ public class CounterMaintenanceView extends AbstractMasterDataBaseLayout impleme
 
 	@Override
 	public void save(Object model) {
-		getUI().ifPresent(ui -> ui.navigate(CounterPageView.URL));
+		getUI().ifPresent(ui -> ui.navigate(CounterHistoryPageView.URL));
 	}
 
 	@Override
@@ -145,7 +147,7 @@ public class CounterMaintenanceView extends AbstractMasterDataBaseLayout impleme
 	@Override
 	public void remove() {
 		service.delete(model);
-		getUI().ifPresent(ui -> ui.navigate(CounterPageView.URL));
+		getUI().ifPresent(ui -> ui.navigate(CounterHistoryPageView.URL));
 	}
 
 }

@@ -27,9 +27,9 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 
-import de.ollie.counter.ws.core.model.Counter;
+import de.ollie.counter.ws.core.model.CounterHistory;
 import de.ollie.counter.ws.core.model.PageParameters;
-import de.ollie.counter.ws.core.service.CounterService;
+import de.ollie.counter.ws.core.service.CounterHistoryService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.SessionData;
 import de.ollie.counter.ws.gui.vaadin.UserAuthorizationChecker;
@@ -43,34 +43,34 @@ import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
- * A view for paginated counter lists.
+ * A view for paginated counterhistory lists.
  *
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 @Generated
-@Route(CounterPageView.URL)
+@Route(CounterHistoryPageView.URL)
 @RequiredArgsConstructor
-public class CounterPageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
+public class CounterHistoryPageView extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
-	public static final String URL = "counterws/masterdata/counters";
+	public static final String URL = "counterws/masterdata/counterhistories";
 
-	private static final Logger logger = LogManager.getLogger(CounterPageView.class);
-	private static final String PARAMETER_FILTER = "CounterPageView.Filter";
+	private static final Logger logger = LogManager.getLogger(CounterHistoryPageView.class);
+	private static final String PARAMETER_FILTER = "CounterHistoryPageView.Filter";
 
 	@Autowired(required = false)
-	private MasterDataGridFieldRenderer<Counter> masterDataGridFieldRenderer;
+	private MasterDataGridFieldRenderer<CounterHistory> masterDataGridFieldRenderer;
 
 	private final ButtonFactory buttonFactory;
 	private final ResourceManager resourceManager;
 	private final MasterDataGUIConfiguration guiConfiguration;
-	private final CounterService service;
+	private final CounterHistoryService service;
 	private final SessionData session;
 
 	private Button buttonAdd;
 	private Button buttonDuplicate;
 	private Button buttonEdit;
 	private Button buttonRemove;
-	private Grid<Counter> grid;
+	private Grid<CounterHistory> grid;
 	private TextField textFieldFilter;
 	private VerticalLayout mainLayout;
 
@@ -102,32 +102,20 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 		buttonRemove = buttonFactory.createRemoveButton(resourceManager, event -> removeRecord(), session);
 		grid = new Grid<>();
 		grid
-				.addColumn(model -> getHeaderString("NAME", model, () -> model.getName()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.name.label", session.getLocalization()))
-				.setSortable(true);
-		grid
-				.addColumn(model -> getHeaderString("CURRENTVALUE", model, () -> model.getCurrentValue()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.currentvalue.label", session.getLocalization()))
+				.addColumn(model -> getHeaderString("COUNTER", model, () -> model.getCounter()))
+				.setHeader(resourceManager.getLocalizedString("CounterHistoryPageView.grid.header.counter.label", session.getLocalization()))
 				.setSortable(true);
 		grid
 				.addColumn(model -> getHeaderString("USER", model, () -> model.getUser()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.user.label", session.getLocalization()))
+				.setHeader(resourceManager.getLocalizedString("CounterHistoryPageView.grid.header.user.label", session.getLocalization()))
 				.setSortable(true);
 		grid
-				.addColumn(model -> getHeaderString("SORTORDER", model, () -> model.getSortOrder()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.sortorder.label", session.getLocalization()))
+				.addColumn(model -> getHeaderString("CURRENTVALUE", model, () -> model.getCurrentValue()))
+				.setHeader(resourceManager.getLocalizedString("CounterHistoryPageView.grid.header.currentvalue.label", session.getLocalization()))
 				.setSortable(true);
 		grid
-				.addColumn(model -> getHeaderString("PERIOD", model, () -> model.getPeriod()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.period.label", session.getLocalization()))
-				.setSortable(true);
-		grid
-				.addColumn(model -> getHeaderString("VIEWMODE", model, () -> model.getViewMode()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.viewmode.label", session.getLocalization()))
-				.setSortable(true);
-		grid
-				.addColumn(model -> getHeaderString("VALUETODEVIDE", model, () -> model.getValueToDevide()))
-				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.valuetodevide.label", session.getLocalization()))
+				.addColumn(model -> getHeaderString("LASTCOUNTEREVENT", model, () -> model.getLastCounterEvent()))
+				.setHeader(resourceManager.getLocalizedString("CounterHistoryPageView.grid.header.lastcounterevent.label", session.getLocalization()))
 				.setSortable(true);
 		grid.setMultiSort(true);
 		grid.setWidthFull();
@@ -172,7 +160,7 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 				new HeaderLayout(
 						buttonFactory.createBackButton(resourceManager, this::getUI, MasterDataView.URL, session),
 						buttonFactory.createLogoutButton(resourceManager, this::getUI, session, logger),
-						resourceManager.getLocalizedString("CounterPageView.header.label", session.getLocalization()),
+						resourceManager.getLocalizedString("CounterHistoryPageView.header.label", session.getLocalization()),
 						HeaderLayoutMode.PLAIN),
 				filterLayout,
 				dataLayout);
@@ -184,13 +172,13 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 		textFieldFilter.focus();
 	}
 
-	private Object getHeaderString(String fieldName, Counter aTable, Supplier<?> f) {
+	private Object getHeaderString(String fieldName, CounterHistory aTable, Supplier<?> f) {
 		return masterDataGridFieldRenderer != null && masterDataGridFieldRenderer.hasRenderingFor(fieldName)
 				? masterDataGridFieldRenderer.getHeaderString(fieldName, aTable)
 				: f.get();
 	}
 
-	private void enabledButtons(SelectionEvent<Grid<Counter>, Counter> event) {
+	private void enabledButtons(SelectionEvent<Grid<CounterHistory>, CounterHistory> event) {
 		if (event.getFirstSelectedItem().isEmpty()) {
 			setButtonEnabled(buttonAdd, true);
 			setButtonEnabled(buttonDuplicate, false);
@@ -217,7 +205,7 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		logger.info("Counter page layout opened for user '{}'.", session.getUserName());
+		logger.info("CounterHistory page layout opened for user '{}'.", session.getUserName());
 		super.onAttach(attachEvent);
 	}
 
@@ -239,7 +227,7 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 								.collect(Collectors.toList()));
 	}
 
-	private boolean isMatching(Counter model) {
+	private boolean isMatching(CounterHistory model) {
 		List<String> patterns =
 				getWords(textFieldFilter.getValue()).stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
 		if (patterns.isEmpty()) {
@@ -263,16 +251,16 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 		return l;
 	}
 
-	private boolean isMatchingPattern(String pattern, Counter model) {
+	private boolean isMatchingPattern(String pattern, CounterHistory model) {
 		boolean result = false;
-		result = result || getHeaderString(Counter.USER, model, () -> model.getUser()).toString().toLowerCase().contains(pattern);
-		result = result || getHeaderString(Counter.NAME, model, () -> model.getName()).toString().toLowerCase().contains(pattern);
+		result = result || getHeaderString(CounterHistory.COUNTER, model, () -> model.getCounter()).toString().toLowerCase().contains(pattern);
+		result = result || getHeaderString(CounterHistory.USER, model, () -> model.getUser()).toString().toLowerCase().contains(pattern);
 		return result;
 	}
 
 	private void addRecord() {
 		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
-		getUI().ifPresent(ui -> ui.navigate(CounterMaintenanceView.URL));
+		getUI().ifPresent(ui -> ui.navigate(CounterHistoryMaintenanceView.URL));
 	}
 
 	private void duplicateRecord() {
@@ -280,7 +268,7 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			QueryParameters parameters =
 					new QueryParameters(Map.of("id", List.of("" + model.getId()), "duplicate", List.of("true")));
-			getUI().ifPresent(ui -> ui.navigate(CounterMaintenanceView.URL, parameters));
+			getUI().ifPresent(ui -> ui.navigate(CounterHistoryMaintenanceView.URL, parameters));
 		});
 	}
 
@@ -288,7 +276,7 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 		session.setParameter(PARAMETER_FILTER, textFieldFilter.getValue());
 		grid.getSelectedItems().stream().findFirst().ifPresent(model -> {
 			QueryParameters parameters = new QueryParameters(Map.of("id", List.of("" + model.getId())));
-			getUI().ifPresent(ui -> ui.navigate(CounterMaintenanceView.URL, parameters));
+			getUI().ifPresent(ui -> ui.navigate(CounterHistoryMaintenanceView.URL, parameters));
 		});
 	}
 

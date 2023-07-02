@@ -20,7 +20,8 @@ public class TimeDistanceServiceImpl implements TimeDistanceService {
 		return distanceToString(getDistanceInMinutes(dateTime0, dateTime1));
 	}
 
-	private long getDistanceInMinutes(LocalDateTime dateTime0, LocalDateTime dateTime1) {
+	@Override
+	public long getDistanceInMinutes(LocalDateTime dateTime0, LocalDateTime dateTime1) {
 		return Duration.between(getMin(dateTime0, dateTime1), getMax(dateTime0, dateTime1)).toMinutes();
 	}
 
@@ -46,7 +47,8 @@ public class TimeDistanceServiceImpl implements TimeDistanceService {
 					new TimeUnitData("h", 60),
 					new TimeUnitData("m", 1) };
 
-	private String distanceToString(long distanceInMinutes) {
+	@Override
+	public String distanceToString(long distanceInMinutes) {
 		StringBuilder sb = new StringBuilder();
 		for (TimeUnitData timeUnitData : TIME_UNIT_DATA) {
 			long i = distanceInMinutes / timeUnitData.factor;

@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
+import de.ollie.counter.ws.core.service.CounterHistoryService;
 import de.ollie.counter.ws.core.service.CounterResetService;
 import de.ollie.counter.ws.core.service.CounterService;
 import de.ollie.counter.ws.core.service.TimeDistanceService;
@@ -48,6 +49,7 @@ public class MainMenuView extends VerticalLayout
 
 	private final ButtonFactory buttonFactory;
 	private final CounterService counterService;
+	private final CounterHistoryService counterHistoryService;
 	private final CounterResetService counterResetService;
 	private final GUIConfiguration guiConfiguration;
 	private final ResourceManager resourceManager;
@@ -140,7 +142,15 @@ public class MainMenuView extends VerticalLayout
 	}
 
 	private void createAndAddNewCounterComponent(Counter counter) {
-		add(new CounterLayout(counter, counterService, timeDistanceService, buttonFactory, resourceManager, session));
+		add(
+				new CounterLayout(
+						counter,
+						counterService,
+						counterHistoryService,
+						timeDistanceService,
+						buttonFactory,
+						resourceManager,
+						session));
 	}
 
 }

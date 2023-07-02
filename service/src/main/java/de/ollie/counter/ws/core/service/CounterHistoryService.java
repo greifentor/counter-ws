@@ -1,12 +1,12 @@
 package de.ollie.counter.ws.core.service;
 
-import lombok.Generated;
+import de.ollie.counter.ws.core.model.Counter;
 
 /**
  * A service interface for CounterHistory management.
- *
- * GENERATED CODE !!! DO NOT CHANGE !!!
  */
-@Generated
 public interface CounterHistoryService extends CounterHistoryGeneratedService {
+
+	String getMaxDistanceByCounter(Counter counter);
+
 }

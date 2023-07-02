@@ -6,8 +6,11 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -32,7 +35,7 @@ import lombok.Generated;
  * GENERATED CODE !!! DO NOT CHANGE !!!
  */
 @Generated
-public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implements BeforeEnterObserver, HasUrlParameter<String> {
+public abstract class AbstractMasterDataBaseLayout extends Scroller implements BeforeEnterObserver, HasUrlParameter<String> {
 
 	public interface Observer {
 		void save(Object model);
@@ -44,6 +47,7 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 
 	protected Button buttonRemove;
 	protected Button buttonSave;
+	protected VerticalLayout mainLayout;
 
 	protected Map<String, List<String>> parametersMap;
 
@@ -52,6 +56,11 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 	protected abstract ResourceManager getResourceManager();
 
 	protected abstract SessionData getSessionData();
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+	}
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
@@ -188,6 +197,20 @@ public abstract class AbstractMasterDataBaseLayout extends VerticalLayout implem
 
 	protected MasterDataButtonLayout getMasterDataButtonLayout(boolean couldBeRemoved) {
 		return new MasterDataButtonLayout(getButtons(couldBeRemoved));
+	}
+
+	protected void setMargin(boolean b) {
+		if (mainLayout != null) {
+			mainLayout.setMargin(b);
+		}
+	}
+
+	protected void add(Component... components) {
+		if (mainLayout == null) {
+			mainLayout = new VerticalLayout();
+			setContent(mainLayout);
+		}
+		mainLayout.add(components);
 	}
 
 }

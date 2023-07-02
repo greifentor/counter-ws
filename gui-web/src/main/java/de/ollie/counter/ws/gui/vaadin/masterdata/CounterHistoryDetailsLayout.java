@@ -2,15 +2,13 @@ package de.ollie.counter.ws.gui.vaadin.masterdata;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.component.textfield.TextField;
 
 import de.ollie.counter.ws.core.model.Counter;
-import de.ollie.counter.ws.core.model.Period;
+import de.ollie.counter.ws.core.model.CounterHistory;
 import de.ollie.counter.ws.core.model.User;
-import de.ollie.counter.ws.core.model.ViewMode;
+import de.ollie.counter.ws.core.service.CounterHistoryService;
 import de.ollie.counter.ws.core.service.CounterService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.core.service.UserService;
@@ -25,42 +23,41 @@ import lombok.RequiredArgsConstructor;
  */
 @Generated
 @RequiredArgsConstructor
-public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
+public class CounterHistoryDetailsLayout extends AbstractMasterDataBaseLayout {
 
 	private final ButtonFactory buttonFactory;
-	private final Counter model;
-	private final CounterService service;
+	private final CounterHistory model;
+	private final CounterHistoryService service;
+	private final CounterService counterService;
 	private final UserService userService;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
 	private final Observer observer;
-	private final DetailsLayoutComboBoxItemLabelGenerator<Counter> comboBoxItemLabelGenerator;
+	private final DetailsLayoutComboBoxItemLabelGenerator<CounterHistory> comboBoxItemLabelGenerator;
 
+	private ComboBox<Counter> comboBoxCounter;
 	private ComboBox<User> comboBoxUser;
-	private TextField textFieldName;
 	private IntegerField integerFieldCurrentValue;
-	private IntegerField integerFieldSortOrder;
-	private ComboBox<Period> comboBoxPeriod;
-	private ComboBox<ViewMode> comboBoxViewMode;
-	private NumberField numberFieldValueToDevide;
+	private DateTimePicker dateTimePickerLastCounterEvent;
 
 	@Override
 	public void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 		createButtons();
-		comboBoxUser = createComboBox("CounterDetailsLayout.field.user.label", model.getUser(), userService.findAll().toArray(new User[0]));
+		comboBoxCounter = createComboBox("CounterHistoryDetailsLayout.field.counter.label", model.getCounter(), counterService.findAll().toArray(new Counter[0]));
+		comboBoxCounter
+				.setItemLabelGenerator(
+						counter  -> comboBoxItemLabelGenerator != null
+								? comboBoxItemLabelGenerator.getLabel(CounterHistory.COUNTER, counter)
+								: "" + counter.getName());
+		comboBoxUser = createComboBox("CounterHistoryDetailsLayout.field.user.label", model.getUser(), userService.findAll().toArray(new User[0]));
 		comboBoxUser
 				.setItemLabelGenerator(
 						user  -> comboBoxItemLabelGenerator != null
-								? comboBoxItemLabelGenerator.getLabel(Counter.USER, user)
+								? comboBoxItemLabelGenerator.getLabel(CounterHistory.USER, user)
 								: "" + user.getName());
-		textFieldName = createTextField("CounterDetailsLayout.field.name.label", model.getName());
-		integerFieldCurrentValue = createIntegerField("CounterDetailsLayout.field.currentvalue.label", model.getCurrentValue(), null, null, null);
-		integerFieldSortOrder = createIntegerField("CounterDetailsLayout.field.sortorder.label", model.getSortOrder(), null, null, null);
-		comboBoxPeriod = createComboBox("CounterDetailsLayout.field.period.label", model.getPeriod(), Period.values());
-		comboBoxPeriod.setClearButtonVisible(true);
-		comboBoxViewMode = createComboBox("CounterDetailsLayout.field.viewmode.label", model.getViewMode(), ViewMode.values());
-		numberFieldValueToDevide = createNumberField("CounterDetailsLayout.field.valuetodevide.label", model.getValueToDevide(), null, null, null);
+		integerFieldCurrentValue = createIntegerField("CounterHistoryDetailsLayout.field.currentvalue.label", model.getCurrentValue(), null, null, null);
+		dateTimePickerLastCounterEvent = new DateTimePicker(resourceManager.getLocalizedString("CounterHistoryDetailsLayout.field.lastcounterevent.label", session.getLocalization()), model.getLastCounterEvent(), event -> {});
 		getStyle().set("-moz-border-radius", "4px");
 		getStyle().set("-webkit-border-radius", "4px");
 		getStyle().set("border-radius", "4px");
@@ -72,15 +69,12 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 		setMargin(false);
 		setWidthFull();
 		add(
-				textFieldName,
-				integerFieldCurrentValue,
+				comboBoxCounter,
 				comboBoxUser,
-				integerFieldSortOrder,
-				comboBoxPeriod,
-				comboBoxViewMode,
-				numberFieldValueToDevide,
+				integerFieldCurrentValue,
+				dateTimePickerLastCounterEvent,
 				getMasterDataButtonLayout(model.getId() > 0));
-		textFieldName.focus();
+		comboBoxCounter.focus();
 	}
 
 	@Override
@@ -106,13 +100,10 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 
 	@Override
 	protected void save() {
-		model.setName(textFieldName.getValue());
-		model.setCurrentValue(integerFieldCurrentValue.getValue());
+		model.setCounter(comboBoxCounter.getValue());
 		model.setUser(comboBoxUser.getValue());
-		model.setSortOrder(integerFieldSortOrder.getValue());
-		model.setPeriod(comboBoxPeriod.getValue());
-		model.setViewMode(comboBoxViewMode.getValue());
-		model.setValueToDevide(numberFieldValueToDevide.getValue());
+		model.setCurrentValue(integerFieldCurrentValue.getValue());
+		model.setLastCounterEvent(dateTimePickerLastCounterEvent.getValue());
 		observer.save(service.update(model));
 	}
 
