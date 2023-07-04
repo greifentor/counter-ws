@@ -21,9 +21,11 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 
+import de.ollie.counter.ws.core.model.User;
 import de.ollie.counter.ws.core.model.localization.LocalizationSO;
 import de.ollie.counter.ws.core.service.JWTService;
 import de.ollie.counter.ws.core.service.JWTService.AuthorizationData;
+import de.ollie.counter.ws.core.service.UserService;
 import de.ollie.counter.ws.core.service.localization.ResourceManager;
 import de.ollie.counter.ws.gui.AccessChecker;
 import de.ollie.counter.ws.gui.SessionData;
@@ -48,6 +50,7 @@ public class ApplicationStartView extends VerticalLayout implements AccessChecke
 	private final JWTService jwtService;
 	private final ResourceManager resourceManager;
 	private final SessionData session;
+	private final UserService userService;
 	private final WebAppConfiguration webAppConfiguration;
 
 	private AuthorizationData authorizationData;
@@ -62,29 +65,55 @@ public class ApplicationStartView extends VerticalLayout implements AccessChecke
 		if ((parametersMap.get("jwt") != null) && !parametersMap.get("jwt").isEmpty()) {
 			token = parametersMap.get("jwt").get(0);
 		}
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		authorize();
+		LOG.info("attached");
+		refresh();
+	}
+
+	private void authorize() {
+		if ((session.getAuthorizationData() != null) && LocalDateTime.now().isBefore(session.getValidUntil())) {
+			return;
+		}
 		try {
-			authorizationData = jwtService.getAuthorizationData(token);
-			session.setAccessChecker(this);
-			session.setAuthorizationData(authorizationData);
-			session.setLocalization(LocalizationSO.DE);
-			LOG
-					.info(
-							"session started by user: " + authorizationData.getUser().getName() + " ("
-									+ authorizationData.getUser().getGlobalId() + ")");
-			LOG.info("session valid until: " + authorizationData.getLoginDateTime());
+			LOG.info("cube is " + (webAppConfiguration.isCubeEnabled() ? "enabled" : "disabled"));
+			if (webAppConfiguration.isCubeEnabled()) {
+				authorizationData = jwtService.getAuthorizationData(token);
+				session.setAccessChecker(this);
+				session.setAuthorizationData(authorizationData);
+				session.setLocalization(LocalizationSO.DE);
+				session.setValidUntil(LocalDateTime.now().plusHours(4));
+			} else {
+				User user =
+						userService
+								.findByGlobalId(webAppConfiguration.getCubeDisabledUserGlobalId())
+								.orElseGet(
+										() -> userService
+												.update(
+														new User()
+																.setName("D.Fault")
+																.setGlobalId(
+																		webAppConfiguration
+																				.getCubeDisabledUserGlobalId())
+																.setToken("DEFAULT")));
+				authorizationData = new AuthorizationData("carp-maps-ws", LocalDateTime.now(), user, null);
+				session.setAccessChecker(this);
+				session.setAuthorizationData(authorizationData);
+				session.setLocalization(LocalizationSO.DE);
+				session.setValidUntil(LocalDateTime.now().plusHours(4));
+			}
+			LOG.info("session started by user: " + authorizationData.getUser().getName());
+			LOG.info("session valid until: " + session.getValidUntil());
 			LOG.info("current time: " + LocalDateTime.now());
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.warn("tried to login with invalid token! (" + e + ")");
 			switchToCube();
 		}
-	}
-
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
-		LOG.info("attached");
-		refresh();
 	}
 
 	private void refresh() {

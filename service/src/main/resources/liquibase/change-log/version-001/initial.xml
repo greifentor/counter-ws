@@ -78,4 +78,10 @@
 		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="COUNTER_HISTORY" constraintName="FK_COUNTER_HISTORY_USER_TO_USER" referencedColumnNames="ID" referencedTableName="USER" />
 		<addForeignKeyConstraint baseColumnNames="COUNTER" baseTableName="COUNTER_HISTORY" constraintName="FK_COUNTER_HISTORY_COUNTER_TO_COUNTER" referencedColumnNames="ID" referencedTableName="COUNTER" />
 	</changeSet>
+	<changeSet author="dm-comp" id="Add-Field-Counter-Additional_Display_1" runInTransaction="true" failOnError="true">
+		<addColumn tableName="COUNTER">
+			<column name="ADDITIONAL_DISPLAY_1" type="VARCHAR(20)" />
+		</addColumn>
+		<addDefaultValue columnDataType="VARCHAR(20)" columnName="ADDITIONAL_DISPLAY_1" defaultValue="NONE" tableName="COUNTER" />
+	</changeSet>
 </databaseChangeLog>

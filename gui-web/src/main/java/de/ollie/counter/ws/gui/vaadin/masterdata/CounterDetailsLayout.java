@@ -7,6 +7,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 
+import de.ollie.counter.ws.core.model.AdditionalDisplayMode;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.Period;
 import de.ollie.counter.ws.core.model.User;
@@ -43,6 +44,7 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 	private ComboBox<Period> comboBoxPeriod;
 	private ComboBox<ViewMode> comboBoxViewMode;
 	private NumberField numberFieldValueToDevide;
+	private ComboBox<AdditionalDisplayMode> comboBoxAdditionalDisplay1;
 
 	@Override
 	public void onAttach(AttachEvent attachEvent) {
@@ -61,6 +63,8 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 		comboBoxPeriod.setClearButtonVisible(true);
 		comboBoxViewMode = createComboBox("CounterDetailsLayout.field.viewmode.label", model.getViewMode(), ViewMode.values());
 		numberFieldValueToDevide = createNumberField("CounterDetailsLayout.field.valuetodevide.label", model.getValueToDevide(), null, null, null);
+		comboBoxAdditionalDisplay1 = createComboBox("CounterDetailsLayout.field.additionaldisplay1.label", model.getAdditionalDisplay1(), AdditionalDisplayMode.values());
+		comboBoxAdditionalDisplay1.setClearButtonVisible(true);
 		getStyle().set("-moz-border-radius", "4px");
 		getStyle().set("-webkit-border-radius", "4px");
 		getStyle().set("border-radius", "4px");
@@ -79,6 +83,7 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 				comboBoxPeriod,
 				comboBoxViewMode,
 				numberFieldValueToDevide,
+				comboBoxAdditionalDisplay1,
 				getMasterDataButtonLayout(model.getId() > 0));
 		textFieldName.focus();
 	}
@@ -113,6 +118,7 @@ public class CounterDetailsLayout extends AbstractMasterDataBaseLayout {
 		model.setPeriod(comboBoxPeriod.getValue());
 		model.setViewMode(comboBoxViewMode.getValue());
 		model.setValueToDevide(numberFieldValueToDevide.getValue());
+		model.setAdditionalDisplay1(comboBoxAdditionalDisplay1.getValue());
 		observer.save(service.update(model));
 	}
 

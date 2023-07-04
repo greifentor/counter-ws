@@ -45,4 +45,24 @@ public class CounterHistoryServiceImpl extends CounterHistoryGeneratedServiceImp
 		return timeDistanceService.distanceToString(max);
 	}
 
+	@Override
+	public int getAvgClicksByCounter(Counter counter) {
+		List<CounterHistory> histories = findAllByCounter(counter);
+		return histories
+				.stream()
+				.map(CounterHistory::getCurrentValue)
+				.reduce((i0, i1) -> i0 + i1)
+				.map(i -> (i / histories.size()))
+				.orElse(0);
+	}
+
+	@Override
+	public int getMaxClicksByCounter(Counter counter) {
+		return findAllByCounter(counter)
+				.stream()
+				.map(CounterHistory::getCurrentValue)
+				.reduce((i0, i1) -> Math.max(i0, i1))
+				.orElse(0);
+	}
+
 };

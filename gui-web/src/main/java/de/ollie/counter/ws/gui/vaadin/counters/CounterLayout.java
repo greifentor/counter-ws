@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 
+import de.ollie.counter.ws.core.model.AdditionalDisplayMode;
 import de.ollie.counter.ws.core.model.Counter;
 import de.ollie.counter.ws.core.model.ViewMode;
 import de.ollie.counter.ws.core.service.CounterHistoryService;
@@ -91,7 +92,6 @@ public class CounterLayout extends VerticalLayout {
 							createIntegerFieldCurrentValue("CounterLayout.integerFieldCurrentValue.label.text"));
 		} else if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
 			if (counter.getLastCounterEvent() != null) {
-				String pattern = resourceManager.getLocalizedString("datetime.format", session.getLocalization());
 				layout
 						.add(
 								new DateTimePicker(
@@ -101,7 +101,6 @@ public class CounterLayout extends VerticalLayout {
 														session.getLocalization()),
 										counter.getLastCounterEvent(),
 										event -> setLastClickEvent(event.getValue())));
-				// layout.add(new Label(counter.getLastCounterEvent().format(DateTimeFormatter.ofPattern(pattern))));
 				layout
 						.add(
 								new Label(
@@ -122,8 +121,43 @@ public class CounterLayout extends VerticalLayout {
 											"CounterLayout.button.lastclickevent.label",
 											event -> setLastClickEvent(LocalDateTime.now()),
 											session));
-			if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
-				layout.add(new Label("Max: " + counterHistoryService.getMaxDistanceByCounter(counter)));
+		}
+		if (counter.getViewMode() == ViewMode.LAST_CLICK_DATE) {
+			if (counter.getAdditionalDisplay1() == AdditionalDisplayMode.MAX_DISTANCE) {
+				layout
+						.add(
+								resourceManager
+										.getLocalizedString(
+												"CounterLayout.display.maxDistance.label",
+												session.getLocalization())
+										.replace(
+												"${Distance}",
+												counterHistoryService.getMaxDistanceByCounter(counter)));
+			}
+		} else if (counter.getViewMode() == ViewMode.DIVIDED_BY_COUNTS) {
+			LOG.info("divided by counts");
+			if (counter.getAdditionalDisplay1() == AdditionalDisplayMode.AVG_CLICKS) {
+				LOG.info("average clicks");
+				layout
+						.add(
+								resourceManager
+										.getLocalizedString(
+												"CounterLayout.display.avgClicks.label",
+												session.getLocalization())
+										.replace(
+												"${Clicks}",
+												"" + counterHistoryService.getAvgClicksByCounter(counter)));
+			} else if (counter.getAdditionalDisplay1() == AdditionalDisplayMode.MAX_CLICKS) {
+				LOG.info("max clicks");
+				layout
+						.add(
+								resourceManager
+										.getLocalizedString(
+												"CounterLayout.display.maxClicks.label",
+												session.getLocalization())
+										.replace(
+												"${Clicks}",
+												"" + counterHistoryService.getMaxClicksByCounter(counter)));
 			}
 		}
 		add(layout);

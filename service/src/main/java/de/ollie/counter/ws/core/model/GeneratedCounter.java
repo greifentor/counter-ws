@@ -18,6 +18,7 @@ public class GeneratedCounter {
 
 	public static final String ID = "ID";
 	public static final String USER = "USER";
+	public static final String ADDITIONALDISPLAY1 = "ADDITIONALDISPLAY1";
 	public static final String CURRENTVALUE = "CURRENTVALUE";
 	public static final String LASTCOUNTEREVENT = "LASTCOUNTEREVENT";
 	public static final String NAME = "NAME";
@@ -28,6 +29,7 @@ public class GeneratedCounter {
 
 	private long id;
 	private User user;
+	private AdditionalDisplayMode additionalDisplay1;
 	private int currentValue;
 	private LocalDateTime lastCounterEvent;
 	private String name;

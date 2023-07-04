@@ -37,6 +37,9 @@ public class CounterDBO {
 	@JoinColumn(name = "USER", nullable = false, referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private UserDBO user;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ADDITIONAL_DISPLAY_1")
+	private AdditionalDisplayModeDBO additionalDisplay1;
 	@Column(name = "CURRENT_VALUE", nullable = false)
 	private int currentValue;
 	@Column(name = "LAST_COUNTER_EVENT")
