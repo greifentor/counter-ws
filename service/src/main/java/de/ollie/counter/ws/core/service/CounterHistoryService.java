@@ -7,6 +7,10 @@ import de.ollie.counter.ws.core.model.Counter;
  */
 public interface CounterHistoryService extends CounterHistoryGeneratedService {
 
+	int getAvgClicksByCounter(Counter counter);
+
+	int getMaxClicksByCounter(Counter counter);
+
 	String getMaxDistanceByCounter(Counter counter);
 
 }

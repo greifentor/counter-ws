@@ -33,6 +33,12 @@ public class Counter extends GeneratedCounter {
 	}
 
 	@Override
+	public Counter setAdditionalDisplay1(AdditionalDisplayMode additionalDisplay1) {
+		super.setAdditionalDisplay1(additionalDisplay1);
+		return this;
+	}
+
+	@Override
 	public Counter setCurrentValue(int currentValue) {
 		super.setCurrentValue(currentValue);
 		return this;

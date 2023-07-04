@@ -129,6 +129,10 @@ public class CounterPageView extends Scroller implements BeforeEnterObserver, Ha
 				.addColumn(model -> getHeaderString("VALUETODEVIDE", model, () -> model.getValueToDevide()))
 				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.valuetodevide.label", session.getLocalization()))
 				.setSortable(true);
+		grid
+				.addColumn(model -> getHeaderString("ADDITIONALDISPLAY1", model, () -> model.getAdditionalDisplay1()))
+				.setHeader(resourceManager.getLocalizedString("CounterPageView.grid.header.additionaldisplay1.label", session.getLocalization()))
+				.setSortable(true);
 		grid.setMultiSort(true);
 		grid.setWidthFull();
 		grid.addSelectionListener(this::enabledButtons);

@@ -23,6 +23,7 @@ public class CounterDBOConverter implements ToModelConverter<Counter, CounterDBO
 
 	private final PeriodDBOConverter periodDBOConverter;
 	private final UserDBOConverter userDBOConverter;
+	private final AdditionalDisplayModeDBOConverter additionalDisplayModeDBOConverter;
 	private final ViewModeDBOConverter viewModeDBOConverter;
 
 	public CounterDBO toDBO(Counter model) {
@@ -32,6 +33,7 @@ public class CounterDBOConverter implements ToModelConverter<Counter, CounterDBO
 		return new CounterDBO()
 				.setId(model.getId())
 				.setUser(userDBOConverter.toDBO(model.getUser()))
+				.setAdditionalDisplay1(additionalDisplayModeDBOConverter.toDBO(model.getAdditionalDisplay1()))
 				.setCurrentValue(model.getCurrentValue())
 				.setLastCounterEvent(model.getLastCounterEvent())
 				.setName(model.getName())
@@ -49,6 +51,7 @@ public class CounterDBOConverter implements ToModelConverter<Counter, CounterDBO
 		return new Counter()
 				.setId(dbo.getId())
 				.setUser(userDBOConverter.toModel(dbo.getUser()))
+				.setAdditionalDisplay1(additionalDisplayModeDBOConverter.toModel(dbo.getAdditionalDisplay1()))
 				.setCurrentValue(dbo.getCurrentValue())
 				.setLastCounterEvent(dbo.getLastCounterEvent())
 				.setName(dbo.getName())
