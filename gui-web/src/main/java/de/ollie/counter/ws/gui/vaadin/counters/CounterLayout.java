@@ -176,6 +176,7 @@ public class CounterLayout extends VerticalLayout {
 	private void setCurrentValue(Integer currentValue) {
 		LOG.info("setCurrentValue");
 		counter.setCurrentValue(currentValue);
+		counter.setLastCounterEvent(LocalDateTime.now());
 		counter = counterService.update(counter);
 		updateView();
 	}
